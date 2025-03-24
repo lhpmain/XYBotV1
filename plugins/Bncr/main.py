@@ -3,10 +3,10 @@ from loguru import logger
 from WechatAPI import WechatAPIClient
 from utils.decorators import *
 from utils.plugin_base import PluginBase
+from database.XYBotDB import XYBotDB
+
 import aiohttp
 import tomllib
-
-# from database.XYBotDB import XYBotDB
 
 class Bncr(PluginBase):
     description = "Bncr"
@@ -15,21 +15,13 @@ class Bncr(PluginBase):
 
     def __init__(self):
         super().__init__()
-        with open("plugins/Bncr/all_in_one_config.toml", "rb") as f:
+        with open("plugins/Bncr/config.toml", "rb") as f:
             plugin_config = tomllib.load(f)
-     #     with open("main_config.toml", "rb") as f:
-     #         main_config = tomllib.load(f)
-
+            
         config = plugin_config["Bncr"]
-        main_config = main_config["XYBot"]
 
         self.enable = config["enable"]
-      #    self.version = main_config["version"]
         self.base_url = config["base_url"]
-
-       #  plugin_config = config["Bncr"]
-       #  self.enable = plugin_config["enable"]
-       #  self.base_url = plugin_config["base_url"]
 
     async def request(self, message):
         try:
@@ -49,10 +41,10 @@ class Bncr(PluginBase):
         logger.info("收到了被@消息")
         return await self.request(message)
         
-    @on_xml_message
-    async def handle_xml(self, bot: WechatAPIClient, message: dict):
-        logger.info("收到了xml消息")
-        return await self.request(message)
+#     @on_xml_message
+#     async def handle_xml(self, bot: WechatAPIClient, message: dict):
+#         logger.info("收到了xml消息")
+#         return await self.request(message)
          
     @on_friend_request
     async def handle_friend(self, bot: WechatAPIClient, message: dict):
